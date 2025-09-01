@@ -3,30 +3,28 @@
 ** xref:02-accessing-the-cluster.adoc[Accessing the cluster]
 ** xref:common-parksmap-architecture.adoc[Parksmap Application]
 
-* Deploying the Application
-** xref:03-deploying-an-application.adoc[Deploy the Application]
-
-* Querying and Labelling the Resources
-** xref:05-querying-the-resources.adoc[Querying the Resources]
-** xref:06-labelling-of-resources.adoc[Labelling of Resources]
-
 * Deploying the front end web application
 ** xref:07-deployment-resource.adoc[Deployment Resource]
+** xref:05-querying-the-resources.adoc[Querying the Resources]
+** xref:06-labelling-of-resources.adoc[Labelling of Resources]
 ** xref:08-replicasets-and-pods.adoc[Replicasets and Pods]
-
-* Scaling the Application
-** xref:09-replicas-and-scaling.adoc[Replicas and Scaling]
-** xref:10-pods-and-containers.adoc[Pods and Containers]
-
-* xref:11-application-logging.adoc[Application Logging]
-
-* xref:12-accessing-containers.adoc[Accessing the Container]
 
 * Service Networking
 ** xref:13-service-networking.adoc[Exposing to the cluster]
 ** xref:14-exposing-the-service.adoc[Exposing outside the cluster]
 
-* Confinguration and Secrets
+* Scaling the Application
+** xref:09-replicas-and-scaling.adoc[Replicas and Scaling]
+** xref:10-pods-and-containers.adoc[Pods and Containers]
+
+* Deploying the Application
+** xref:03-deploying-an-application.adoc[Deploy the Application]
+
+* Troubleshooting
+* xref:11-application-logging.adoc[Application Logging]
+* xref:12-accessing-containers.adoc[Accessing the Container]
+
+* Configuration and Secrets
 ** xref:15-linking-the-database.adoc[Linking the Database to the App]
 
 * Persistent Volumes
