@@ -1,6 +1,6 @@
 name: modules
 title: Kubernetes Basic Workshop
-version: main
+version: pat-updates
 nav:
   - modules/ROOT/nav.adoc
 
