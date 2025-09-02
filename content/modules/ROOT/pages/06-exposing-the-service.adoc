@@ -4,7 +4,7 @@ In order to expose a `service` so that it is accessible outside of the Kubernete
 
 Again, we can use `kubectl` to create an ingress resource.
 
-[.console-input]
+[.console-input,subs="attributes"]
 [source,execute]
 ----
 kubectl create ingress parksmap --rule='parksmap-wksp-{user}.apps.cluster-{openshift_cluster_ingress_domain}/*=parksmap:8080'
@@ -26,7 +26,7 @@ kubectl get ingress
 
 Now that the `ingress` has been created, you can access the front end web application using a web browser at:
 
-http://parksmap-wksp-$user.$openshift_cluster_ingress_domain
+http://parksmap-wksp-{user}.{openshift_cluster_ingress_domain}
 
 Note that this works because a wildcard CNAME has already been pre-configured in an external domain name server (DNS) to direct traffic for this host to the router for the Kubernetes cluster. If this was your own Kubernetes cluster, you would need to configure an appropriate CNAME in the DNS for the host you want to use.
 
