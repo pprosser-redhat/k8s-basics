@@ -18,22 +18,21 @@ Getting Started
 * xref:common-parksmap-architecture.adoc[Parksmap Application]
 
 [.tile]
-Deploying the Application
-
-* xref:03-deploying-an-application.adoc[Deploy the Appliction]
-
-[.tile]
-Querying and Labelling the Resources
-
-* xref:05-querying-the-resources.adoc[Querying the Resources]
-* xref:06-labelling-of-resources.adoc[Labelling of Resources]
-
-[.tile]
 
 Deploying the front end web application
 
 * xref:07-deployment-resource.adoc[Deployment Resource]
 * xref:08-replicasets-and-pods.adoc[Replicasets and Pods]
+* xref:05-querying-the-resources.adoc[Querying the Resources]
+* xref:06-labelling-of-resources.adoc[Labelling of Resources]
+
+[.tile]
+Service Networking
+
+* xref:13-service-networking.adoc[Exposing to the cluster]
+* xref:14-exposing-the-service.adoc[Exposing outside the cluster]
+
+
 
 [.tile]
 Scaling the Application
@@ -42,19 +41,18 @@ Scaling the Application
 * xref:10-pods-and-containers.adoc[Pods and Containers]
 
 [.tile]
-xref:11-application-logging.adoc[Application Logging]
+Deploying the Application
+
+* xref:03-deploying-an-application.adoc[Deploy the Appliction]
 
 [.tile]
-xref:12-accessing-containers.adoc[Accessing the Container]
+Troubleshooting
+* xref:11-application-logging.adoc[Application Logging]
+* xref:12-accessing-containers.adoc[Accessing the Container]
+
 
 [.tile]
-Service Networking
-
-* xref:13-service-networking.adoc[Exposing to the cluster]
-* xref:14-exposing-the-service.adoc[Exposing outside the cluster]
-
-[.tile]
-Confinguration and Secrets
+Configuration and Secrets
 
 * xref:15-linking-the-database.adoc[Linking the Database to the App]
 
