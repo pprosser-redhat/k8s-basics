@@ -1,12 +1,4 @@
-In the previous excercise, we queried some of the resources that were created from our deployment:
-
-[.console-input]
-[source,execute]
-----
-kubectl get all
-----
-
-To see much more detailed information about a resource `kubectl describe` can be used.
+In the previous excercise, we queried some of the resources that were created from our deployment. To see much more detailed information about a resource `kubectl describe` can be used.
 
 [.console-input]
 [source, execute]

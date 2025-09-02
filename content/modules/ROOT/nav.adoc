@@ -6,7 +6,6 @@
 * Deploying the front end web application
 ** xref:03-deployment-resource.adoc[Deployment Resource]
 ** xref:04-querying-and-labels.adoc[Querying the Resources]
-** xref:08-replicasets-and-pods.adoc[Replicasets and Pods]
 
 * Service Networking
 ** xref:13-service-networking.adoc[Exposing to the cluster]

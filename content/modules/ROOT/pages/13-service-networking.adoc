@@ -1,4 +1,4 @@
-As we saw in a previous labe lab, the `pod` corresponding to each instance of your application is ephemeral. If it dies it is not resurrected. The `replicaset` ensures that a `pod` that has died is replaced with a new instance, as well as ensuring the correct number of `pods` exist when scaling the number of replicas up or down. When a new `pod` is created, it will always have a new name.
+The `pod` corresponding to each instance of your application is ephemeral. If it dies it is not resurrected. The `replicaset` ensures that a `pod` that has died is replaced with a new instance, as well as ensuring the correct number of `pods` exist when scaling the number of replicas up or down. When a new `pod` is created, it will always have a new name.
 
 Each `pod`, as well as having a unique name, is also assigned it's own IP address. You can see the IP addresses assigned to each `pod` by running:
 
@@ -6,6 +6,32 @@ Each `pod`, as well as having a unique name, is also assigned it's own IP addres
 [source,execute]
 ----
 kubectl get pods -o wide
+----
+
+[.console-output]
+[source]
+----
+NAME                        READY   STATUS    RESTARTS   AGE    IP             NODE                            NOMINATED NODE   READINESS GATES
+parksmap-86f598b786-dvr4m   1/1     Running   0          122m   10.132.0.197   control-plane-cluster-dvtv2-1   <none>           <none>
+----
+
+See what happens when you delete your pod. Use the pod name from the previous output and delete it with `kubectl delete pod`.
+
+[.console-output]
+[source]
+----
+kubectl delete pod/parksmap-86f598b786-dvr4m
+pod "parksmap-86f598b786-dvr4m" deleted
+----
+
+Now check for running pods again and you should see a new pod has started in its place. It also has a different IP address!
+
+[.console-output]
+[source]
+----
+kubectl get pods -o wide
+NAME                        READY   STATUS    RESTARTS   AGE   IP            NODE                            NOMINATED NODE   READINESS GATES
+parksmap-86f598b786-tl25c   1/1     Running   0          5s    10.132.1.27   control-plane-cluster-dvtv2-1   <none>           <none>
 ----
 
 These IP addresses are only accessible within the Kubernetes cluster. Depending on the Kubernetes networking configuration, they may only be accessible from applications running in the same namespace.

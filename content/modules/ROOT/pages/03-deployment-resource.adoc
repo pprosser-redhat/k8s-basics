@@ -57,23 +57,6 @@ Although you only created the `deployment`, this has resulted in the creation of
 
 This is because `deployment` acts as a template for the creation of a `replicaset`. A `replicaset` in turn acts as a template for the creation of the `pods`. It is the `pods` which represent the instances of your application. In this case, because the number of replicas has been set to 1, there is 1 pod.
 
-As mentioned earlier, the Kubernetes cluster will continously monitor our application to ensure it is in the desired state. See what happens when you delete your pod. Use the pod name from the previous output and delete it with `kubectl delete pod`.
 
-[.console-output]
-[source]
-----
-kubectl delete pod/parksmap-86f598b786-dvr4m
-pod "parksmap-86f598b786-dvr4m" deleted
-----
-
-Now check for running pods again and you should see a new pod has started in its place:
-
-[.console-output]
-[source]
-----
-kubectl get pod
-NAME                        READY   STATUS    RESTARTS   AGE
-parksmap-86f598b786-h7chx   1/1     Running   0          4s
-----
 
 We just deployed our first Kubernetes application! We will continue to build on this simple deployment to deploy the remainder of the Parksmap application as well as looking at how we can expose the application to users.
