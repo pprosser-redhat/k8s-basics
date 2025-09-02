@@ -34,13 +34,17 @@ In one of the terminals windows you need to login to the cluster, logging into o
 
 Enter the following command:
 
-```
+[.console-input]
+[source, execute, subs="attributes"]
+----
 oc login  https://api.cluster-{guid}.dynamic.redhatworkshops.io:6443 -u {user} -p {password} --insecure-skip-tls-verify
-```
+----
 
 You should see the following in response to the command:
 
-```
+[.console-output]
+[source, subs="attributes"]
+----
 WARNING: Using insecure TLS client config. Setting this option is not supported!
 
 Login successful.
@@ -48,7 +52,7 @@ Login successful.
 You have one project on this server: wksp-{user}
 
 Using project wksp-{user}
-```
+----
 
 As an enterprise Kubernetes platform, the environment you are using is locked down and you are unable to create namespaces. Namespaces enable you to isolate your resources within a single cluster. The isolation is what's enabling all workshop attendees to perform the same labs on the same cluster without impacting each other's work.
 
