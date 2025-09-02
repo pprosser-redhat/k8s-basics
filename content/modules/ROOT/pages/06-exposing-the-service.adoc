@@ -1,3 +1,5 @@
+include::vars.adoc[]
+
 In order to expose a `service` so that it is accessible outside of the Kubernetes cluster, you need to create an `ingress` resource object.
 
 Again, we can use `kubectl` to create an ingress resource.

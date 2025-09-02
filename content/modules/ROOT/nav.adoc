@@ -8,15 +8,17 @@
 ** xref:04-querying-and-labels.adoc[Querying the Resources]
 
 * Service Networking
-** xref:13-service-networking.adoc[Exposing to the cluster]
-** xref:14-exposing-the-service.adoc[Exposing outside the cluster]
+** xref:05-service-networking.adoc[Exposing to the cluster]
+** xref:06-exposing-the-service.adoc[Exposing outside the cluster]
+
+* Kubernetes Manifests declarative management
+** xref:07-deploying-an-application.adoc[Deploy the Application]
 
 * Scaling the Application
 ** xref:09-replicas-and-scaling.adoc[Replicas and Scaling]
 ** xref:10-pods-and-containers.adoc[Pods and Containers]
 
-* Deploying the Application
-** xref:03-deploying-an-application.adoc[Deploy the Application]
+
 
 * Troubleshooting
 ** xref:11-application-logging.adoc[Application Logging]
