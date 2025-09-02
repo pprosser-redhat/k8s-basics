@@ -47,6 +47,7 @@ Deploying the Application
 
 [.tile]
 Troubleshooting
+
 * xref:11-application-logging.adoc[Application Logging]
 * xref:12-accessing-containers.adoc[Accessing the Container]
 
