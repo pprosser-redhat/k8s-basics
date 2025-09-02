@@ -34,7 +34,11 @@ In one of the terminals windows you need to login to the cluster, logging into o
 
 Enter the following command:
 
-`oc login  https://api.cluster-{guid}.dynamic.redhatworkshops.io:6443 -u {user} -p {password} --insecure-skip-tls-verify`
+[.console-input]
+[source, execute]
+----
+oc login  https://api.cluster-{guid}.dynamic.redhatworkshops.io:6443 -u {user} -p {password} --insecure-skip-tls-verify`
+----
 
 You should see the following in response to the command:
 
