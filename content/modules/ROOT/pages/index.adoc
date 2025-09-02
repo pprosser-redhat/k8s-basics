@@ -21,10 +21,8 @@ Getting Started
 
 Deploying the front end web application
 
-* xref:07-deployment-resource.adoc[Deployment Resource]
-* xref:08-replicasets-and-pods.adoc[Replicasets and Pods]
-* xref:05-querying-the-resources.adoc[Querying the Resources]
-* xref:06-labelling-of-resources.adoc[Labelling of Resources]
+* xref:03-deployment-resource.adoc[Deployment Resource]
+* xref:04-querying-and-labels.adoc[Querying the Resources and labels]
 
 [.tile]
 Service Networking

@@ -1,0 +1,97 @@
+In the previous excercise, we queried some of the resources that were created from our deployment:
+
+[.console-input]
+[source,execute]
+----
+kubectl get all
+----
+
+To see much more detailed information about a resource `kubectl describe` can be used.
+
+[.console-input]
+[source, execute]
+----
+kubectl describe deployment/parksmap
+----
+
+Here is a snippet of the information displayed for a deployment:
+
+[.console-output]
+[source]
+----
+Name:                   parksmap
+Namespace:              wksp-user2
+CreationTimestamp:      Tue, 02 Sep 2025 13:00:08 +0000
+Labels:                 app=parksmap
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=parksmap
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=parksmap
+  Containers:
+   parksmap:
+    Image:         quay.io/openshiftroadshow/parksmap:latest
+    ....
+----
+
+This is still in a semi human readable form and isn't suitable for machine processing. To instead see the raw resource definition, you can use the `-o yaml` display output option to `kubectl get`.
+
+[.console-input]
+[source, execute]
+----
+kubectl get deployment/parksmap -o yaml
+----
+
+Or if you prefer to work with JSON rather than YAML, you can use:
+
+[.console-input]
+[source, execute]
+----
+kubectl get deployment/parksmap  -o json
+----
+
+=== Labels
+
+As we already saw, it isn't a single resource definition which defines everything about the deployment of an application, but a set of resources. Labels are key/value pairs that are attached to objects. They can be used to specify meaningful information or to indicate that a set of resources are related. You can also perform queries to look up resources based on the labels.
+
+Take a look at your parksmap deployment again to view the associated labels.
+
+[.console-input]
+[source, execute]
+----
+kubectl describe deployment/parksmap
+----
+
+Note that we can set labels on different objects within a deployment - you should see a `Labels` section for the deployment which shows a single label of `app=parksmap`. There is also the *Pod Template* section of the deployment which shows the labels which will be assigned to the pods themselves. Aagin, we only have a single label.
+
+[.console-output]
+[source]
+----
+Name:                   parksmap
+Namespace:              wksp-user2
+CreationTimestamp:      Tue, 02 Sep 2025 13:00:08 +0000
+Labels:                 app=parksmap
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=parksmap
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=parksmap
+  Containers:
+   parksmap:
+    Image:         quay.io/openshiftroadshow/parksmap:latest
+    ....
+----
+
+We can query the labels associated to a pod as follows:
+
+[.console-input]
+[source, execute]
+----
+kubectl get po --show-labels
+----

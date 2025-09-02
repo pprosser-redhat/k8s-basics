@@ -1,0 +1,123 @@
+As we already saw, it isn't a single resource definition which defines everything about the deployment of an application, but a set of resources. Labels are key/value pairs that are attached to objects. They can be used to specify meaningful information or to indicate that a set of resources are related. You can also perform queries to look up resources based on the labels.
+
+Take a look at your parksmap deployment again to view the associated labels.
+
+[.console-input]
+[source, execute]
+----
+kubectl describe deployment/parksmap
+----
+
+Note that we can set labels on different objects within a deployment - you should see a `Labels` section for the deployment which shows a single label of `app=parksmap`. There is also the *Pod Template* section of the deployment which shows the labels which will be assigned to the pods themselves. Aagin, we only have a single label.
+
+[.console-output]
+[source]
+----
+Name:                   parksmap
+Namespace:              wksp-user2
+CreationTimestamp:      Tue, 02 Sep 2025 13:00:08 +0000
+Labels:                 app=parksmap
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=parksmap
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=parksmap
+  Containers:
+   parksmap:
+    Image:         quay.io/openshiftroadshow/parksmap:latest
+    ....
+----
+
+We can query the labels associated to a pod as follows:
+
+[.console-input]
+[source, execute]
+----
+kubectl get po --show-labels
+----
+
+
+
+Let's add some labels to our deployment, we'll need these as we start deploying additional components of the Parksmap application. Run the following command to add labels to our deployment:
+
+[.console-input]
+[source, execute]
+----
+kubectl label --overwrite deployment parksmap app=workshop app.kubernetes.io/part-of=workshop app.kubernetes.io/instance=parksmap app.kubernetes.io/component=parksmap app.openshift.io/runtime=rh-spring-boot role=frontend app.kubernetes.io/name=parksmap component=parksmap
+----
+
+If you describe the deployment again, you should see that the labels have been added to the deployment metadata, but not to the Pod Template.
+
+[.console-output]
+[source]
+----
+
+Name:                   parksmap
+Namespace:              wksp-user2
+CreationTimestamp:      Tue, 02 Sep 2025 14:14:11 +0000
+Labels:                 app=workshop
+                        app.kubernetes.io/component=parksmap
+                        app.kubernetes.io/instance=parksmap
+                        app.kubernetes.io/name=parksmap
+                        app.kubernetes.io/part-of=workshop
+                        app.openshift.io/runtime=rh-spring-boot
+                        component=parksmap
+                        role=frontend
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=parksmap
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=parksmap
+  Containers:
+   parksmap:
+    Image:         quay.io/openshiftroadshow/parksmap:latest
+----
+
+To do this we’ll use the kubectl edit command. 'kubectl edit' allows us to update the yaml files in Kubernetes directly. In your terminal window type:
+
+[.console-input]
+[source, execute]
+----
+kubectl edit deployment parksmap
+----
+
+You’ll need to follow along carefully as the indentation is really important in yaml. If you are unfamilar with terminal line editors then please ask one of the Red Hatters to help.
+
+You should see the following output:
+
+[.console-output]
+[source]
+----
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2025-09-02T14:14:11Z"
+  generation: 1
+  labels:
+    app: parksmap
+----
+
+Firstly, find the section under metadata called labels and you should see app: parksmap there.
+
+Delete that whole line
+
+copy and paste the following labels:
+
+        app: parksmap
+        component: parksmap
+        deployment: parksmap
+        role: frontend
+
+it is really important that they are indented by 2 spaces underneath labels

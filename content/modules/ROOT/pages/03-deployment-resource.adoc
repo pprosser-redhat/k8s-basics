@@ -1,0 +1,79 @@
+Now you have checked your access to the Kubernetes cluster is working, we are going to immediately jump in and deploy the first component of the national parks application, the front end web application. Later we will deploy the backend application and a MongoDB database for storing the worlds national parks in. Together, they will implement a site that maps the worlds national parks.
+
+A key resource in Kubernetes is a `deployment` resource which defines how to create and update instances of your application. Once a deployment is created, the application instance is scheduled on the Kubernetes cluster and is continously monitored to ensure it is in the desired state. If the application instance is deleted or the node it is running on becomes unavailable, then the application instance is automatically restarted on a surviving node. A deployment also defines the strategy for rolling out new versions of your application.
+
+We are going to use `kubectl` to create our first deployment. `Kubectl` is the Kubernetes command line interface which uses the Kubernetes API to interact with the cluster. The common format of a kubectl command is: `kubectl action resource`.
+
+We are going to use `kubectl create deployment`, specifying the container image for our application as well as the number of replicas that we want to run. We will cover replicas in more detail later on. 
+
+[.console-input]
+[source, execute]
+----
+kubectl create deployment parksmap --image quay.io/openshiftroadshow/parksmap:latest --replicas 1
+----
+
+You should see the following output:
+
+[.console-output]
+[source]
+----
+deployment.apps/parksmap created
+----
+
+You can monitor the deployment to make sure it's successful by running the following command:
+
+[.console-input]
+[source, execute]
+----
+kubectl rollout status deployment/parksmap
+----
+
+Having created the `deployment` run:
+
+[.console-input]
+[source,execute]
+----
+kubectl get all
+----
+
+The `all` value is not a resource type, but a short hand alias for the core Kubernetes resource types. It shows what we need here, but to be sure to get everything you want, you are usually better to list the resource types explicitly.
+
+The output should be similar to:
+
+[.console-output]
+[source]
+----
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/parksmap-86f598b786-dvr4m   1/1     Running   0          44s
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/parksmap   1/1     1            1           44s
+
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/parksmap-86f598b786   1         1         1       44s
+----
+
+Although you only created the `deployment`, this has resulted in the creation of additional resources for `replicaset` and `pod`.
+
+This is because `deployment` acts as a template for the creation of a `replicaset`. A `replicaset` in turn acts as a template for the creation of the `pods`. It is the `pods` which represent the instances of your application. In this case, because the number of replicas has been set to 1, there is 1 pod.
+
+As mentioned earlier, the Kubernetes cluster will continously monitor our application to ensure it is in the desired state. See what happens when you delete your pod. Use the pod name from the previous output and delete it with `kubectl delete pod`.
+
+[.console-output]
+[source]
+----
+kubectl delete pod/parksmap-86f598b786-dvr4m
+pod "parksmap-86f598b786-dvr4m" deleted
+----
+
+Now check for running pods again and you should see a new pod has started in its place:
+
+[.console-output]
+[source]
+----
+kubectl get pod
+NAME                        READY   STATUS    RESTARTS   AGE
+parksmap-86f598b786-h7chx   1/1     Running   0          4s
+----
+
+We just deployed our first Kubernetes application! We will continue to build on this simple deployment to deploy the remainder of the Parksmap application as well as looking at how we can expose the application to users.

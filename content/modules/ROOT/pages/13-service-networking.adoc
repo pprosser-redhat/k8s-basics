@@ -1,11 +1,11 @@
-The `pod` corresponding to each instance of your application is ephemeral. If it dies it is not resurrected. The `replicaset` ensures that a `pod` that has died is replaced with a new instance, as well as ensuring the correct number of `pods` exist when scaling the number of replicas up or down. When a new `pod` is created, it will always have a new name.
+As we saw in a previous labe lab, the `pod` corresponding to each instance of your application is ephemeral. If it dies it is not resurrected. The `replicaset` ensures that a `pod` that has died is replaced with a new instance, as well as ensuring the correct number of `pods` exist when scaling the number of replicas up or down. When a new `pod` is created, it will always have a new name.
 
 Each `pod`, as well as having a unique name, is also assigned it's own IP address. You can see the IP addresses assigned to each `pod` by running:
 
 [.console-input]
 [source,execute]
 ----
-kubectl get pods -l component=parksmap -o wide
+kubectl get pods -o wide
 ----
 
 These IP addresses are only accessible within the Kubernetes cluster. Depending on the Kubernetes networking configuration, they may only be accessible from applications running in the same namespace.
@@ -14,73 +14,25 @@ Like with the names of `pods`, the IP addresses in use for an application will n
 
 To add a stable IP address and hostname for an application, a `service` resource needs to be created. The IP address of a `service` will map to the set of `pods` which make up your application, with traffic to the IP address of the service being load balanced across the `pods`.
 
-As with creating a `deployment`, the `kubectl` program provides convenience methods for creating a `service`. These are `kubectl expose` and `kubectl create service`. We will skip these and use the resource definition. Run:
+As with creating a `deployment`, the `kubectl` program provides convenience methods for creating a `service`. These are `kubectl expose` and `kubectl create service`. 
+
+When used to create the resource object, this will result in a `service` named `parksmap` being created that will expose port 8080 on the `pods`.
 
 [.console-input]
 [source,execute]
 ----
-cat frontend-v1/service-parksmap.yaml
-----
-
-to see the `service` definition. You should see:
-
-[.console-input]
-[source,execute]
-----
-kind: Service
-apiVersion: v1
-metadata:
-  name: parksmap
-  labels:
-    app: workshop
-    app.kubernetes.io/component: parksmap
-    app.kubernetes.io/instance: parksmap
-    app.kubernetes.io/name: parksmap
-    app.kubernetes.io/part-of: workshop
-    app.openshift.io/runtime-version: latest
-    component: parksmap
-    role: frontend
-spec:
-  ports:
-    - name: 8080-tcp
-      protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: ClusterIP
-  selector:
-    app: parksmap
-    deployment: parksmap
+kubectl expose deployment/parksmap --port 8080
 ----
 
 When used to create the resource object, this will result in a `service` named `parksmap` being created. The `ports` definition says that port 8080 will be exposed, with it mapping to port 8080 on the `pods`.
 
-You could choose to create the service object just as we did with the deployment object (`kubectl create`). However, as you start getting used to kubernetes you might want to start creating the objects by defining the yaml. This will aid the move to production and gitops down the road. We need to produce the yaml to automate  deployment, rather than having to run cli based commands all of the time.
+We can view the newly created service:
 
-Lets use the yaml file that we just looked at this time. Update the current application configuration by running:
-
-[.console-input]
-[source,execute]
-----
-kubectl apply -f frontend-v1/
-----
-
-The output should be:
-
-[.console-output]
-[source]
-----
-deployment.apps/parksmap configured
-service/parksmap created
-----
-
-As the `frontend-v1` directory also contains our original `deployment-parksmap.yaml` file, this will also ensure that the current deployment is brought into line with what it defines.
-
-To review details of the `service` created run:
 
 [.console-input]
 [source,execute]
 ----
-kubectl get service --selector component=parksmap -o wide
+kubectl get service -o wide
 ----
 
 This will display output similar to:
@@ -89,7 +41,7 @@ This will display output similar to:
 [source]
 ----
 NAME       TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE     SELECTOR
-parksmap   ClusterIP   172.31.53.168   <none>        8080/TCP   3m18s   app=parksmap,deployment=parksmap
+parksmap   ClusterIP   172.31.53.168   <none>        8080/TCP   3m18s   app=parksmap
 ----
 
 You can see that the service has it's own IP address.
@@ -103,7 +55,6 @@ The `service` will know what the corresponding `pods` are that traffic should be
 ----
   selector:
     app: parksmap
-    deployment: parksmap
 ----
 
 This means that the IP addresses for the `pods` resulting from a query of:
@@ -111,7 +62,7 @@ This means that the IP addresses for the `pods` resulting from a query of:
 [.console-input]
 [source,execute]
 ----
-kubectl get pods -l app=parksmap,deployment=parksmap -o name
+kubectl get pods -l app=parksmap -o name
 ----
 
 will be registered as endpoints against the `service`.
@@ -130,10 +81,10 @@ This will display output similar to:
 [source]
 ----
 NAME       ENDPOINTS                           AGE
-parksmap   10.132.2.54:8080,10.133.2.61:8080   10m
+parksmap   10.132.2.54:8080   10m
 ----
 
-You see the IP addresses of both pods along with the service port defined.
+You see the IP address of the pods along with the service port defined.
 
 Although the IP address will not change for the life of the `service` object, the IP should still not be used. Imagine the problems it would cause when moving applications through environments. Instead, a hostname corresponding to the `service` should be used. The hostname is the name of the `service`, is registered within an internal DNS in the Kubernetes cluster, and can be used by any application within the cluster.
 
