@@ -21,8 +21,8 @@
 ** xref:03-deploying-an-application.adoc[Deploy the Application]
 
 * Troubleshooting
-* xref:11-application-logging.adoc[Application Logging]
-* xref:12-accessing-containers.adoc[Accessing the Container]
+** xref:11-application-logging.adoc[Application Logging]
+** xref:12-accessing-containers.adoc[Accessing the Container]
 
 * Configuration and Secrets
 ** xref:15-linking-the-database.adoc[Linking the Database to the App]
