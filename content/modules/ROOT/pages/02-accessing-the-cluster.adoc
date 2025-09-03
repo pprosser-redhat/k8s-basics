@@ -5,19 +5,6 @@ For the exercises you will be doing, you will be using the `kubectl` command lin
 
 The terminal window is provided for you via the interactive terminal session available in your workshop guide.  
 
-The workshop environment also provides you with a web based view into the Kubernetes cluster. This web based view uses the web interface which is included in OpenShift 4. Whilst not part of the workshop, it is included here so you can visually see the results of what you do in the exercises if you want, the exercises do not depend on it. The web interface provided here is different to the web interface that may be provided with other Kubernetes distributions.
-
-Testing cluster details 
-
-To access the OpenShift Console, navigate to the following URL in your browser and log in using the provided credentials:
-
-*Console URL:* link:{ocp4_starter_console_url}[{ocp4_starter_console_url},window='_blank']
-
-*Username:* `{user}`
-
-*Password:* `{ocp4_starter_password}`
-
-
 ## Accessing the terminal window so you can use the cluster
 
 ### Workshop Environment
