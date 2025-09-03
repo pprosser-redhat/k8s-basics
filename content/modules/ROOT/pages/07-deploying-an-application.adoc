@@ -1,15 +1,38 @@
-= Deploying an Application
-:navtitle: Deploying an Application
+= Declarative workflows with Kubernetes manifests
 
 include::vars.adoc[]
 
-Now you have checked your access to the Kubernetes cluster is working, we are going to immediately jump in and deploy a complete application, consisting of a front end web application, a backend restful application, along with a MongoDB database for storing the worlds national parks in. Together, they will implement a site that maps the worlds national parks.
+We've deployed the frontend to our Parksmap application and learned some of the fundamentals of how applications are deployed and exposed in a Kubernetes cluster. So far, we have taken an imperative approach to configuring our application - specific commands executed with a correct order. 
 
-== Deploying an Application
+The preferred approach to management with Kubernetes is to use a declarative approach - define the desired state of all resources through configuration files without specifying an order or operation. 
 
-This is to show you how quickly you can deploy a complete application to Kubernetes if you already have the configuration. Once the complete application has been deployed, we will delete the front end web application component, and deploy it again in steps so you can see how it fits together and how it uses Kubernetes.
+We can still use `kubectl` to apply the desired state, but now the operation of create, delete or update will be automatically detected based on state. This approach allows us to consistently deploy applications into multiple environments. Furthermore, this approach enables more mature ways of working - GitOps tools such as ArgoCD can be employed to maintain desired state based on changes to Git repositores. Helm and Kustomize are additional tools that can be used to template Kubernetes manifests so they can flexibly be deployed to multiple environments e.g. Production and Development lifecycles. 
+
+### Clone the GIT repository containing Kubernetes manifests
+
+We are going to deploy the remaining components of the Parksmap application. Kubernetes manifests for MongoDB and the backend application are held in a publically available Github repository, you need to clone it. To do this, in the terminal window enter the following:
+
+[.console-input]
+[source, execute]
+----
+git clone https://github.com/pprosser-redhat/k8s-basics.git
+----
+
+You can see the resulting clone in both terminal windows.
+
+To be prepared to use the repositories workshop files, change directory to it:
+
+[.console-input]
+[source, execute]
+----
+cd k8s-basics/apps
+----
+
+All of the files we need will be accessible from the directory you are now in.
 
 === Deploying the database
+
+This is to show you how quickly you can deploy a complete application to Kubernetes if you already have the configuration. 
 
 The first part of the application we want to deploy is the MongoDB database. The set of resource files for deploying this can be found in the `database` directory.
 
@@ -33,7 +56,6 @@ This should output:
 [source,subs="attributes"]
 ----
 deployment.apps/mongodb-community-server created (dry run)
-persistentvolumeclaim/national-parks-database created (dry run)
 secret/mongodb-nationalparks configured (dry run)
 service/mongodb-community-server created (dry run)
 ----
@@ -63,12 +85,11 @@ As with the dry run, `kubectl apply` will list the resources, except this time t
 [source]
 ----
 deployment.apps/mongodb-community-server created
-persistentvolumeclaim/national-parks-database created
 secret/mongodb-nationalparks configured
 service/mongodb-community-server created
 ----
 
-The key resource in this list is `deployment`. It specifies the name of the container image to be deployed for an application, how many instances should be started, and the strategy for how the deployment should be managed.
+Again, key resource in this list is `deployment`. It specifies the name of the container image to be deployed for an application, how many instances should be started, and the strategy for how the deployment should be managed.
 
 To monitor progress of the deployment, and know when it has completed, you can run the command:
 
@@ -80,114 +101,9 @@ kubectl rollout  status deployment/mongodb-community-server
 
 The argument is the full name of the resource, including the type of resource and the name for this instance. In this case the instance was called `mongodb-community-server`.
 
-=== Deploying the front end web application
-
-As you are running on an environment provisioned specifically for the workshop, it does mean that we have to make a a change to the application deployment before we can go ahead and deploy the frontend application. 
-
-==== Change the host address
-In the terminal window, edit the file `frontend/ingress-parksmap.yaml`
-
-type
-
-[.console-input]
-[source, execute]
-----
-vim frontend/ingress-parksmap.yaml
-----
-
-and change the `host` field from what you see in the screenshot below:
-
-image::ingress-screenshot.png[Parksmap Ingress, 900]
-
-to the host field you see below.
-
-`- host: parksmap-wksp-{user}.{openshift_cluster_ingress_domain}`
-
-==== Deploy the front end web application
-
-[.console-input]
-[source,execute]
-----
-kubectl apply -f frontend/
-----
-
-This should output:
-
-[.console-output]
-[source]
-----
-deployment.apps/parksmap created
-ingress.networking.k8s.io/parksmap created
-rolebinding.rbac.authorization.k8s.io/parksmap-view created
-service/parksmap created
-----
-
-Run:
-
-[.console-input]
-[source,execute]
-----
-kubectl rollout status deployment/parksmap
-----
-
-to monitor and wait for it to be deployed.
-
-In the resources created for the front end web application, the `ingress` is special, in that it is what sets up access to our web application using a public URL.
-
-In this example, the URL for accessing the front end web application will be:
-
-`http://parksmap-wksp-{user}.{openshift_cluster_ingress_domain}`
-
-This is easy to findout by running a query againts the parksmap ingress using `kubectl`:
-[.console-input]
-[source,execute]
-----
-kubectl get ingress parksmap -o=jsonpath='{.spec.rules[0]}' | jq
-----
-
-This should output something like this:
-[.console-output]
-[source]
-----
-{
-  "host": "parksmap-user1-workshop.apps.cluster-5cbfd.dynamic.redhatworkshops.io",
-  "http": {
-    "paths": [
-      {
-        "backend": {
-          "service": {
-            "name": "parksmap",
-            "port": {
-              "number": 8080
-            }
-          }
-        },
-        "path": "/",
-        "pathType": "Prefix"
-      }
-    ]
-  }
-}
-----
-
-The value of host is what you are after.
-
-Visit the front end web application by typing (or copying), or right clicking and opening in a new tab.
-
-`http://parksmap-wksp-{user}.{openshift_cluster_ingress_domain}`
-
-into your browser
-
-It should look like:
-
-[.bordershadow]
-image::parksmap.png[link="self",window=_blank]
-
-NOTE: There are no national parks displayed as yet. We still have to deploy the backend application, which is what we'll do next.
-
 === Deploy the backend restful application
 
-With the front end web application deployed, now deploy the backend application by running:
+We can now deploy the backend application by running:
 
 [.console-input]
 [source,execute]
@@ -201,7 +117,6 @@ This should output:
 [source]
 ----
 deployment.apps/nationalparks-py created
-ingress.networking.k8s.io/nationalparks-py created
 service/nationalparks-py created
 ----
 
@@ -217,9 +132,7 @@ Now visit the front end web application again (make sure you refresh the page), 
 
 === Load the data
 
-Fortunately, the backend application has an API that we can use to load the data. Later, we'll look at how logging might have helped us work this out.
-
-To load the data into the database, run the following `curl` command in your terminal window:
+Fortunately, the backend application has an API that we can use to load the data. To load the data into the database, run the following `curl` command in your terminal window:
 
 `curl http://nationalparks-py.wksp-{user}.svc.cluster.local:8080/ws/data/load`
 
@@ -245,5 +158,3 @@ Refresh the parksmap page in the `browser` and this time you should see national
 image::parksmap-with-np.png[link="self",window=_blank]
 
 Feel free to move around the map, zoom in and out, and click on national parks.
-
-

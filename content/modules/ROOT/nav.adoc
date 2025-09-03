@@ -15,8 +15,7 @@
 ** xref:07-deploying-an-application.adoc[Deploy the Application]
 
 * Scaling the Application
-** xref:09-replicas-and-scaling.adoc[Replicas and Scaling]
-** xref:10-pods-and-containers.adoc[Pods and Containers]
+** xref:08-replicas-and-scaling.adoc[Replicas and Scaling]
 
 
 

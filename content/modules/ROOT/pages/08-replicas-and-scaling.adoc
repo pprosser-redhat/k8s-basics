@@ -21,7 +21,7 @@ and if you run:
 [.console-input]
 [source,execute]
 ----
-kubectl get pods -l component=parksmap
+kubectl get pods -l app=parksmap
 ----
 
 you should now see that there are 3 pods running instead of the original 1.
@@ -47,7 +47,7 @@ Run:
 [.console-input]
 [source,execute]
 ----
-kubectl get pods -l component=parksmap
+kubectl get pods -l app=parksmap
 ----
 
 again and you will see that you are back to 2 replicas.
@@ -56,22 +56,20 @@ If you ran the command fast enough after applying the original configuration you
 
 This continual process whereby Kubernetes will ensure that the number of instances of your application, i.e., `pods`, matches the desired number of replicas specified in the `deployment`, comes into play in another way as well. This is that if an instance of your application was killed, Kubernetes will replace it automatically.
 
-You can simulate this scenario by deleting one of the `pods`. To see what happens, first run in one terminal:
+We already did this in a previous lab, but let us simulate a failure scenario by deleting one of the `pods`. To see what happens, first run in one terminal:
 
 [.console-input]
 [source,execute]
 ----
-kubectl get pods -l component=parksmap --watch
+watch ubectl get pods -l app=parksmap
 ----
-
-The `--watch` option to `kubectl get pods` says to monitor the pods over time and show any changes.
 
 Now from another terminal delete one of the `pods`.
 
 [.console-input]
 [source,execute]
 ----
-kubectl delete `kubectl get pod -l component=parksmap -o name | head -1`
+kubectl delete `kubectl get pod -l app=parksmap -o name | head -1`
 ----
 
 You should see the `pod` which was targeted being marked as `Terminating` and it will be removed. Because though the desired number of replicas is 2, a new instance of your application will be automatically started to replace it.

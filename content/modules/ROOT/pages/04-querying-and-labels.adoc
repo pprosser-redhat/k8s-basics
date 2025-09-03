@@ -87,3 +87,5 @@ We can query the labels associated to a pod as follows:
 ----
 kubectl get po --show-labels
 ----
+
+These labels will be crucial in our next lab as we look how we can expose our application over the network.

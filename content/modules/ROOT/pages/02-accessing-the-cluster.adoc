@@ -65,28 +65,6 @@ You won't really know that you are using it, as your environment will default to
 
 NOTE: The workshop will now take place in the terminal window. 
 
-### Clone the GIT repository required for the workshop
-
-The workshop materials are held in a publically available Github repository, you need to clone it. To do this, in the terminal window enter the following:
-
-[.console-input]
-[source, execute]
-----
-git clone https://github.com/pprosser-redhat/k8s-basics.git
-----
-
-You can see the resulting clone in both terminal windows.
-
-To be prepared to use the repositories workshop files, change directory to it:
-
-[.console-input]
-[source, execute]
-----
-cd k8s-basics/apps
-----
-
-All of the files we need will be accessible from the directory you are now in.
-
 ### Test kubectl
 Before continuing, verify that the `kubectl` command runs and the workshop environment is also functioning. To do this run:
 
