@@ -5,20 +5,26 @@ As you have already seen, you can list the `pods` for the front end web applicat
 [.console-input]
 [source,execute]
 ----
-kubectl get pods -l component=parksmap -o name
+kubectl get pods -l app=parksmap -o name
 ----
 
-To access the log output for a specific instance of your application, you can use the name of the `pod` with the `kubectl logs` command.
-
-As we have multiple pods, we need to grab just one of the names.
+To access the log output for an application, you can use the name of the deployment with the `kubectl logs` command.
 
 [.console-input]
 [source,execute]
 ----
-POD=`kubectl get pod -l component=parksmap -o template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | head -1` && echo $POD
+kubectl logs deployment/parksmap
 ----
 
-The command above just gets the pod name from the output and stores it in an environemnt variable. if you don't want to be flash then you can just copy and paste the pod name directly into the `kubectl logs` command.
+We can also look at an individual pod. As we have multiple pods, we need to grab just one of the names.
+
+[.console-input]
+[source,execute]
+----
+POD=`kubectl get pod -l app=parksmap -o name | head -1`
+----
+
+The command above just gets the name of the first pod from the output and stores it in an environemnt variable. if you don't want to be flash then you can just copy and paste the pod name directly into the `kubectl logs` command.
 
 run `kubectl logs`:
 

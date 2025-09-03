@@ -1,32 +1,57 @@
 To gain access to the container in which an instance of an application is running, and run a command, you can use `kubectl exec`.
 
-As with logging, you need to specify the particular `pod` you wan't to access, and if there are multiple containers running in the `pod`, specify which container using the `-c` or `--container` option.
+As with logging, you can *exec* into a deployment or a particular `pod`. Again, if there are multiple  containers running in the `pod`, specify which container using the `-c` or `--container` option. Let's list all of the environment variables running in the backend application pod. The actual command we run in the pod is after the *--*
 
 [.console-input]
 [source,execute]
 ----
-kubectl exec $POD -- env
+kubectl exec deployment/nationalparks-py -- env
 ----
 
-The command above has ran the command `env` inside the container, and then outputted the environment variables within the running container.
+You should see output similar to the following. 
+
+[.console-output]
+[source]
+----
+DB_URI=mongodb-community-server
+database-admin-password=mongodb
+database-name=mongodb
+database-password=mongodb
+database-user=mongodb
+PARKSMAP_PORT=tcp://172.31.123.61:8080
+----
+
+Scroll through the output in the terminal and note some of the environment variables. These variables are used by the application so that it can establish connections to the MongoDB database. More on environment variables, configuration and secrets in the next exercise.
 
 If you want to run an interactive terminal session, you need to ensure you use the `-i` or `--stdin` option, and the `-t` or `--tty` option.
 
 [.console-input]
 [source,execute]
 ----
-kubectl exec -it $POD -- bash
+kubectl exec -it deployment/mongodb-community-server -- /bin/bash
 ----
 
-From the interactive shell, you can view files in the file system.
+In the last lab we provisioned persistent storage mounted at /data. Run `df -h` in the interactive session - this shows there is nothing magic happening, we are simply mounting storage at the requested mount path in the same way we would on a Linux host. In the output you will see /data/db mounted on a block device such as /dev/rbd17.
 
 [.console-input]
 [source,execute]
 ----
-ls -las
+df -h
 ----
 
-and can interact with the application processes:
+[.console-output]
+[source]
+----
+df -h
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         100G   68G   33G  68% /
+tmpfs            64M     0   64M   0% /dev
+shm              64M     0   64M   0% /dev/shm
+tmpfs            13G  131M   13G   2% /etc/passwd
+/dev/rbd17      974M  201M  757M  21% /data/db
+----
+
+Finally, interact with the application processes:
 
 [.console-input]
 [source,execute]

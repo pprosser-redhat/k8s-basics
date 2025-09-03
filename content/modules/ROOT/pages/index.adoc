@@ -40,21 +40,18 @@ Scaling the Application
 
 * xref:08-replicas-and-scaling.adoc[Replicas and Scaling]
 
+[.tile]
+Persistent Volumes
 
+* xref:09-persistent-volumes.adoc[Persistent Volumes]
 
 [.tile]
 Troubleshooting
 
-* xref:11-application-logging.adoc[Application Logging]
-* xref:12-accessing-containers.adoc[Accessing the Container]
-
+* xref:10-application-logging.adoc[Application Logging]
+* xref:11-accessing-containers.adoc[Accessing the Container]
 
 [.tile]
 Configuration and Secrets
 
-* xref:15-linking-the-database.adoc[Linking the Database to the App]
-
-[.tile]
-Persistent Volumes
-
-* xref:17-persistent-volumes.adoc[Persistent Volumes]
+* xref:12-linking-the-database.adoc[Linking the Database to the App]

@@ -1,6 +1,4 @@
-To provide persistence for data you are using a MongoDB database, all instances of the application are using the same database, as we scale the application up and down, the database data is available to all instances. 
-
-Currently, the databases data is stored inside the running container, the storage in the container is ephemeral, when a  database `pod` is killed, the data is lost. Not really the desired outcome of a database.
+The Parksmap application uses a MongoDB database to store details for national parks. Currently, the databases data is stored inside the running container, this means the storage in the container is ephemeral, when a  database `pod` is killed, the data is lost. Not really the desired outcome of a database.
 
 Lets test this out.
 
@@ -12,7 +10,7 @@ In your terminal window, type:
 kubectl delete pod --force -l role=database
 ----
 
-Go back to the Parksmap application in your browser. You should see that all the National Parks are gone. 
+The MongoDB pod has been replaced and we have lost the ephemeral database - Refresh the Parksmap application in your browser. You should see that all the National Parks are gone!
 
 A resource that can be associated with any 'pod' is a persistent volume. The data stored in the persistent volume will survive when the pod is killed and restarted. `Persistent volumes` are typically stored in some form of shared storage and is configured by the kubernetes platform owner. You define the configuration in the template section of the deployment yaml file. It will then roll the configuration out to the resulting `pods`
 
@@ -120,15 +118,25 @@ To apply the configuration changes run:
 kubectl apply -f database-v1/deployment.yaml
 ----
 
-You should see confirmation that the deployment was configured.
+You should see confirmation that the deployment was configured. The changes to the deployment have triggered the MongoDB pod to be re-created with the new configuration. Wait for the new pod to start:
 
-The database should now be able to recover from failures, restarts and so on.
+[.console-input]
+[source,execute]
+----
+watch kubectl get po -l role=database
+----
+
+When the pod reaches a *running* state, the database should now be able to recover from failures, restarts and so on.
 
 Test it out.
 
-Firstly, lets load the datab back info the database. In the terminal window, run 
+Firstly, lets load the data back info the database. In the terminal window, run 
 
-`curl http://nationalparks-py.wksp-{user}.svc.cluster.local:8080/ws/data/load`
+[.console-input]
+[source, execute, subs="attributes"]
+----
+curl http://nationalparks-py.wksp-{user}.svc.cluster.local:8080/ws/data/load
+----
 
 Refresh the parksmap page in the `browser`. You should see national parks appearing on the map.
 
@@ -151,4 +159,3 @@ Check the status of the pod to make sure it is running by typing the following i
 ----
 kubectl get pods -l role=database
 ----
-
