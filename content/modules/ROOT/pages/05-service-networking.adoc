@@ -42,7 +42,7 @@ Like with the names of `pods`, the IP addresses in use for an application will n
 
 To add a stable IP address and hostname for an application, a `service` resource needs to be created. The IP address of a `service` will map to the set of `pods` which make up your application, with traffic to the IP address of the service being load balanced across the `pods`.
 
-As with creating a `deployment`, the `kubectl` program provides convenience methods for creating a `service`. These are `kubectl expose` and `kubectl create service`. 
+As with creating a `deployment`, the `kubectl` program provides convenient methods for creating a `service`. These are `kubectl expose` and `kubectl create service`. 
 
 When used to create the resource object, this will result in a `service` named `parksmap` being created that will expose port 8080 on the `pods`.
 
@@ -51,8 +51,6 @@ When used to create the resource object, this will result in a `service` named `
 ----
 kubectl expose deployment/parksmap --port 8080
 ----
-
-When used to create the resource object, this will result in a `service` named `parksmap` being created. The `ports` definition says that port 8080 will be exposed, with it mapping to port 8080 on the `pods`.
 
 We can view the newly created service:
 
@@ -76,13 +74,21 @@ You can see that the service has it's own IP address.
 
 Another application running in the same namespace can connect on this IP address and port 8080 to talk to the front end web application.
 
-The `service` will know what the corresponding `pods` are that traffic should be load balanced across by virtue of the label selector defined in the `service`. Another useful use case of labelling in kubernetes. This is the `spec.selector` value:
+The `service` will know what the corresponding `pods` are that traffic should be load balanced across by virtue of the label selector defined in the `service`. Another useful use case of labelling in kubernetes. Take a look at the service that was created and observe the selector that was used:
+
+[.console-input]
+[source,execute]
+----
+kubectl get service parksmap -o yaml
+----
+
+In the output you will find the spec for the selector:
 
 [.console-output]
 [source]
 ----
-  selector:
-    app: parksmap
+selector:
+  app: parksmap
 ----
 
 This means that the IP addresses for the `pods` resulting from a query of:
@@ -108,7 +114,7 @@ This will display output similar to:
 [.console-output]
 [source]
 ----
-NAME       ENDPOINTS                           AGE
+NAME       ENDPOINTS          AGE
 parksmap   10.132.2.54:8080   10m
 ----
 

@@ -61,7 +61,7 @@ We already did this in a previous lab, but let us simulate a failure scenario by
 [.console-input]
 [source,execute]
 ----
-watch ubectl get pods -l app=parksmap
+watch kubectl get pods -l app=parksmap
 ----
 
 Now from another terminal delete one of the `pods`.
@@ -76,8 +76,7 @@ You should see the `pod` which was targeted being marked as `Terminating` and it
 
 When complete, interrupt the `kubectl get --watch` command to stop it.
 
-[.console-input]
-[source,execute]
+[.console-output]
 ----
 <ctrl+c>
 ----

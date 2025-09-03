@@ -1,4 +1,4 @@
-In the previous excercise, we queried some of the resources that were created from our deployment. To see much more detailed information about a resource `kubectl describe` can be used.
+In the previous excercise, we queried some of the resources that were created from our deployment. To see  more detailed information about a resource `kubectl describe` can be used.
 
 [.console-input]
 [source, execute]
@@ -47,7 +47,7 @@ kubectl get deployment/parksmap  -o json
 
 === Labels
 
-As we already saw, it isn't a single resource definition which defines everything about the deployment of an application, but a set of resources. Labels are key/value pairs that are attached to objects. They can be used to specify meaningful information or to indicate that a set of resources are related. You can also perform queries to look up resources based on the labels.
+As we already saw, it isn't a single resource definition which defines everything about the deployment of an application, but a set of resources. Labels are key/value pairs that are attached to objects. They can be used to specify meaningful information or to indicate that a set of resources are related. You can also perform queries and take actions to a set of resources based on the labels.
 
 Take a look at your parksmap deployment again to view the associated labels.
 
@@ -88,4 +88,4 @@ We can query the labels associated to a pod as follows:
 kubectl get po --show-labels
 ----
 
-These labels will be crucial in our next lab as we look how we can expose our application over the network.
+These labels will be crucial in the next lab as we look how we can expose our application over the network.

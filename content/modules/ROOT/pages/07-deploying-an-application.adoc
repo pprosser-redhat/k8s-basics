@@ -2,15 +2,25 @@
 
 include::vars.adoc[]
 
-We've deployed the frontend to our Parksmap application and learned some of the fundamentals of how applications are deployed and exposed in a Kubernetes cluster. So far, we have taken an imperative approach to configuring our application - specific commands executed with a correct order. 
+We've deployed the frontend to our Parksmap application and learned some of the fundamentals of how applications are deployed and exposed in a Kubernetes cluster. So far, we have taken an imperative approach to configuring our application - specific commands executed in the correct order. 
 
 The preferred approach to management with Kubernetes is to use a declarative approach - define the desired state of all resources through configuration files without specifying an order or operation. 
 
 We can still use `kubectl` to apply the desired state, but now the operation of create, delete or update will be automatically detected based on state. This approach allows us to consistently deploy applications into multiple environments. Furthermore, this approach enables more mature ways of working - GitOps tools such as ArgoCD can be employed to maintain desired state based on changes to Git repositores. Helm and Kustomize are additional tools that can be used to template Kubernetes manifests so they can flexibly be deployed to multiple environments e.g. Production and Development lifecycles. 
 
+### Getting started with Kubernetes manifests
+
+Earlier, when we deployed the frontend to the Parksmap application, we used `kubectl create deployment`. We can use the `dry-run` option of this command to help generate Kubernetes manifests. Run the following command, this is the same command we ran to deploy the frontend - this time we are using the `dry-run` option as well as outputing in YAML format. This will show you what is being created for us. This could form the basis of a more complex application deployment.
+
+[.console-input]
+[source, execute]
+----
+kubectl create deployment parksmap --image quay.io/openshiftroadshow/parksmap:latest --replicas 1 --dry-run=client -o yaml
+----
+
 ### Clone the GIT repository containing Kubernetes manifests
 
-We are going to deploy the remaining components of the Parksmap application. Kubernetes manifests for MongoDB and the backend application are held in a publically available Github repository, you need to clone it. To do this, in the terminal window enter the following:
+We are going to deploy the remaining components of the Parksmap application. Kubernetes manifests for the MongoDB and the backend application are held in a publically available Github repository, you need to clone it. To do this, in the terminal window enter the following:
 
 [.console-input]
 [source, execute]
@@ -61,15 +71,7 @@ service/mongodb-community-server created (dry run)
 ----
 
 
-The `kubectl apply` command in this case is what is used to create resources from a configuration file, or set of files contained in a directory. We used the `--dry-run=client` option, which says to tell us what would be created, but don't actually do it. The `--dry-run=client` option is useful because it will tell you what resources would be created, but also validates the resource definitions and will warn you if you have errors in them.
-
-If you are ever uncertain about what a command does, or what options it accepts, you can run it with the `--help` option.
-
-[.console-input]
-[source,execute]
-----
-kubectl apply --help
-----
+The `kubectl apply` command in this case is what is used to create resources from a configuration file, or set of files contained in a directory. Again, we used the `--dry-run=client` option, which says to tell us what would be created, but don't actually do it. The `--dry-run=client` option is useful because it will tell you what resources would be created, but also validates the resource definitions and will warn you if you have errors in them.
 
 By doing a dry run deployment, you have seen the resources that will be created. To actually deploy the database component, now run:
 
@@ -96,7 +98,7 @@ To monitor progress of the deployment, and know when it has completed, you can r
 [.console-input]
 [source,execute]
 ----
-kubectl rollout  status deployment/mongodb-community-server
+kubectl rollout status deployment/mongodb-community-server
 ----
 
 The argument is the full name of the resource, including the type of resource and the name for this instance. In this case the instance was called `mongodb-community-server`.

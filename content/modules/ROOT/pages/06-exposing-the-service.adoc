@@ -2,7 +2,7 @@ include::vars.adoc[]
 
 In order to expose a `service` so that it is accessible outside of the Kubernetes cluster, you need to create an `ingress` resource object.
 
-Again, we can use `kubectl` to create an ingress resource. This looks a little complicated, but we will break it down and explain it.
+Again, we can use `kubectl` to create an ingress resource. This looks a little complicated, but we will break it down and explain it. First, run the following command to create the ingress object:
 
 [.console-input,subs="attributes"]
 [source,execute]
@@ -30,7 +30,7 @@ http://parksmap-wksp-{user}.{openshift_cluster_ingress_domain}
 
 Note that this works because a wildcard CNAME has already been pre-configured in an external domain name server (DNS) to direct traffic for this host to the router for the Kubernetes cluster. If this was your own Kubernetes cluster, you would need to configure an appropriate CNAME in the DNS for the host you want to use.
 
-You should now see the start of our parksmap application!
+You should now see the start of our parksmap application! We haven't deployed all of the components of the Parksmap application yet, so we won't see any national parks on the map. Let's deploy the rest of the application!
 
 [.bordershadow]
 image::parksmap.png[link="self",window=_blank]

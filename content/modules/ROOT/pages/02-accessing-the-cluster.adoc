@@ -58,7 +58,7 @@ As an enterprise Kubernetes platform, the environment you are using is locked do
 
 A namespace has automatically been created for you, it is called 
 
-wksp-{user}
+*wksp-{user}*
 
 You won't really know that you are using it, as your environment will default to it all the time. It's good to know that it is being used though, as namespaces will become an important facility you use to isolate workloads on the clusters. 
 
