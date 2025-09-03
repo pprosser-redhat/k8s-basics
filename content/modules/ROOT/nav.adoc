@@ -12,11 +12,10 @@
 ** xref:06-exposing-the-service.adoc[Exposing outside the cluster]
 
 * Kubernetes Manifests declarative management
-** xref:07-deploying-an-application.adoc[Deploy the Application]
+** xref:07-deploying-an-application.adoc[Deploy applications]
 
 * Scaling the Application
 ** xref:08-replicas-and-scaling.adoc[Replicas and Scaling]
-
 
 
 * Troubleshooting
