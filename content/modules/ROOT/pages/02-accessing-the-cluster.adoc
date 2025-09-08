@@ -17,7 +17,7 @@ image::workshop-screenshot.png[Workshop Guide, 1000]
 
 On the right hand side of the screen, as above, you'll see 2 terminal windows that you can use to complete the labs.
 
-In one of the terminals windows you need to login to the cluster, logging into one of them will also provide the login context to the other. Feel free to use one of both of the windows. One of the labs later on will take advantage of having 2 terminal windows.
+In one of the terminals windows you need to login to the cluster, logging into one of them will also provide the login context to the other. Feel free to use one or both of the windows. Some of the labs will take advantage of having 2 terminal windows.
 
 Enter the following command:
 
@@ -41,9 +41,9 @@ You have one project on this server: wksp-{user}
 Using project wksp-{user}
 ----
 
-As an enterprise Kubernetes platform, the environment you are using is locked down and you are unable to create namespaces. Namespaces enable you to isolate your resources within a single cluster. The isolation is what's enabling all workshop attendees to perform the same labs on the same cluster without impacting each other's work.
+As an enterprise Kubernetes platform, the environment you are using is locked down and you are unable to create namespaces. Namespaces enable you to isolate your resources within a single cluster. The isolation is what's enabling all workshop attendees to perform the same labs on the same cluster without impacting each other's work. Resource limits and quotas can also be set against namespaces to ensure one user or application does not consume all of the resources on a cluster.
 
-A namespace has automatically been created for you, it is called 
+A namespace has automatically been created for you, it is called:
 
 *wksp-{user}*
 

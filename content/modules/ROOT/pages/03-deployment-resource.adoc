@@ -1,6 +1,6 @@
 Now you have checked your access to the Kubernetes cluster is working, we are going to immediately jump in and deploy the first component of the national parks application, the front end web application. Later we will deploy the backend application and a MongoDB database for storing the worlds national parks in. Together, they will implement a site that maps the worlds national parks.
 
-A key resource in Kubernetes is a `deployment` resource which defines how to create and update instances of your application. Once a deployment is created, the application instance is scheduled on the Kubernetes cluster and is continously monitored to ensure it is in the desired state. If the application instance is deleted or the node it is running on becomes unavailable, then the application instance is automatically restarted on a surviving node. A deployment also defines the strategy for rolling out new versions of your application.
+A key resource in Kubernetes is a `deployment` resource which defines how to create and update instances of your application. Once a deployment is created, the application instance is scheduled on the Kubernetes cluster and is continuously monitored to ensure it is in the desired state. If the application instance is deleted or the node it is running on becomes unavailable, then the application instance is automatically restarted on a surviving node. A deployment also defines the strategy for rolling out new versions of your application.
 
 We are going to use `kubectl` to create our first deployment. `kubectl` is the Kubernetes command line interface which uses the Kubernetes API to interact with the cluster. The common format of a kubectl command is: `kubectl action resource`.
 
@@ -66,7 +66,5 @@ replicaset.apps/parksmap-86f598b786   1         1         1       44s
 Although you only created the `deployment`, this has resulted in the creation of additional resources for `replicaset` and `pod`.
 
 This is because `deployment` acts as a template for the creation of a `replicaset`. A `replicaset` in turn acts as a template for the creation of the `pods`. It is the `pods` which represent the instances of your application. In this case, because the number of replicas has been set to 1, there is 1 pod.
-
-
 
 We just deployed our first Kubernetes application! We will continue to build on this simple deployment to create the remainder of the Parksmap application as well as looking at how we can expose the application to users.

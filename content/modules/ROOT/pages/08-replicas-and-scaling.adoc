@@ -32,7 +32,7 @@ The problem with having run `kubectl scale` is that the configuration in Kuberne
 
 Of course, if the application required more replicas you could just change the defined replicas in the production yaml file and use gitops technology to automatically apply the change. 
 
-If the workload is a little more spikey then an alternative solution would be to use a Kuberenetes type called the `Horizontal Pod Autoscaler`. The HPA will automatically scale up or down based on CPU utilisation, memory usage and other metrics. This is a very powerful feature which we won't cover here but it's worth knowing about if you are interested in learning more.
+If the workload is a little more spikey then an alternative solution would be to use a Kuberenetes type called the `Horizontal Pod Autoscaler (HPA)` . The HPA will automatically scale up or down based on CPU utilisation, memory usage and other metrics. This is a very powerful feature which we won't cover here but it's worth knowing about if you are interested in learning more.
 
 To save some resources, lets scale back to 2 replicas:
 
@@ -50,7 +50,7 @@ Run:
 kubectl get pods -l app=parksmap
 ----
 
-again and you will see that you are back to 2 replicas.
+Again, you will see that we are back to 2 replicas.
 
 If you ran the command fast enough after applying the original configuration you may see a `pod` listed as being in `Terminating` state. This is the `pod` which is being shutdown in order to bring the number of replicas back to 2. Keep running `kubectl get pods` until you see the number in the `Running` state return back to 2.
 
@@ -72,7 +72,7 @@ Now from another terminal delete one of the `pods`.
 kubectl delete `kubectl get pod -l app=parksmap -o name | head -1`
 ----
 
-You should see the `pod` which was targeted being marked as `Terminating` and it will be removed. Because though the desired number of replicas is 2, a new instance of your application will be automatically started to replace it.
+You should see the `pod` which was targeted being marked as `Terminating` and it will be removed. Because the desired number of replicas is 2, a new instance of your application will be automatically started to replace it.
 
 When complete, interrupt the `kubectl get --watch` command to stop it.
 

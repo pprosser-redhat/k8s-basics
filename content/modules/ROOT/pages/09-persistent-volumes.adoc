@@ -159,3 +159,5 @@ Check the status of the pod to make sure it is running by typing the following i
 ----
 kubectl get pods -l role=database
 ----
+
+Finally, refresh the parksmap page in the browser again. The parks data should now be persistent and still visible!

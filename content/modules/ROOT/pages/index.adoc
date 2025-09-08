@@ -5,7 +5,7 @@
 [.text-center.strong]
 == Introdution to Kubernetes
 
-This workshop will introduce to all the most commonly used objects when deploying applications to Kubernetes.
+This workshop will introduce you to all of the most commonly used objects when deploying applications to Kubernetes.
 
 [.tiles.browse]
 == Browse modules

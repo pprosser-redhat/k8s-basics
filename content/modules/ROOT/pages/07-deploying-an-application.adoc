@@ -91,7 +91,7 @@ secret/mongodb-nationalparks configured
 service/mongodb-community-server created
 ----
 
-Again, key resource in this list is `deployment`. It specifies the name of the container image to be deployed for an application, how many instances should be started, and the strategy for how the deployment should be managed.
+Again, a key resource in this list is `deployment`. It specifies the name of the container image to be deployed for an application, how many instances should be started, and the strategy for how the deployment should be managed.
 
 To monitor progress of the deployment, and know when it has completed, you can run the command:
 
@@ -110,7 +110,7 @@ We can now deploy the backend application by running:
 [.console-input]
 [source,execute]
 ----
-kubectl apply -f ./backend/
+kubectl apply -f backend/
 ----
 
 This should output:
@@ -147,7 +147,7 @@ This should output:
 "Items inserted in database: 2762"
 ----
 
-As the terminal window is running in the same namespace as the nationalparks-py application on Kubernetes, it can access the kubernetes service directly hence no need for finding out the ingress host name to use (more later).
+As the terminal window is running in the same namespace as the nationalparks-py application on Kubernetes, it can access the kubernetes service directly.
 
 
 === Let the fun begin!!!

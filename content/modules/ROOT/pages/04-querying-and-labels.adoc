@@ -57,7 +57,7 @@ Take a look at your parksmap deployment again to view the associated labels.
 kubectl describe deployment/parksmap
 ----
 
-Note that we can set labels on different objects within a deployment - you should see a `Labels` section for the deployment which shows a single label of `app=parksmap`. There is also the *Pod Template* section of the deployment which shows the labels which will be assigned to the pods themselves. Aagin, we only have a single label.
+Note that we can set labels on different objects within a deployment - you should see a `Labels` section for the deployment which shows a single label of `app=parksmap`. There is also the *Pod Template* section of the deployment which shows the labels which will be assigned to the pods themselves. Again, we only have a single label.
 
 [.console-output]
 [source]
@@ -88,4 +88,4 @@ We can query the labels associated to a pod as follows:
 kubectl get po --show-labels
 ----
 
-These labels will be crucial in the next lab as we look how we can expose our application over the network.
+These labels will be crucial in the next lab as we look at how we can expose our application over the network.
