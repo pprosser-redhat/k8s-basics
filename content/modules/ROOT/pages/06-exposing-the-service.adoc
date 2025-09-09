@@ -7,7 +7,7 @@ Again, we can use `kubectl` to create an ingress resource. This looks a little c
 [.console-input,subs="attributes"]
 [source,execute]
 ----
-kubectl create ingress parksmap --rule='parksmap-wksp-{user}.apps.cluster-{openshift_cluster_ingress_domain}/*=parksmap:8080'
+kubectl create ingress parksmap --rule='parksmap-wksp-{user}.{openshift_cluster_ingress_domain}/*=parksmap:8080'
 ----
 
 The `rules` section in the `ingress` definition is what controls what should happen when traffic for your web application is received by the router for the Kubernetes cluster.
