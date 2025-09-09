@@ -7,12 +7,12 @@ Again, we can use `kubectl` to create an ingress resource. This looks a little c
 [.console-input,subs="attributes"]
 [source,execute]
 ----
-kubectl create ingress parksmap --rule='parksmap-wksp-{user}.apps.cluster-{openshift_cluster_ingress_domain}/*=parksmap:8080'
+kubectl create ingress parksmap --rule='parksmap-wksp-{user}.apps.cluster-{guid}.dynamic.redhatworkshops.io/*=parksmap:8080'
 ----
 
 The `rules` section in the `ingress` definition is what controls what should happen when traffic for your web application is received by the router for the Kubernetes cluster.
 
-In this case the rule says that any HTTP requests received for the host `parksmap-wksp-{user}.{openshift_cluster_ingress_domain}` should be directed to the application with `service` object named `parksmap`.
+In this case the rule says that any HTTP requests received for the host `parksmap-wksp-{user}.apps.cluster-{guid}.dynamic.redhatworkshops.io` should be directed to the application with `service` object named `parksmap`.
 
 When an external user accesses the host name from their web browser, they will use the standard port 80 for HTTP traffic, the router will pass through that traffic to port 8080 of the `service`.
 
@@ -26,7 +26,7 @@ kubectl get ingress
 
 Now that the `ingress` has been created, you can access the front end web application using a web browser at:
 
-http://parksmap-wksp-{user}.{openshift_cluster_ingress_domain}
+http://parksmap-wksp-{user}.apps.cluster-{guid}.dynamic.redhatworkshops.io
 
 Note that this works because a wildcard CNAME has already been pre-configured in an external domain name server (DNS) to direct traffic for this host to the router for the Kubernetes cluster. If this was your own Kubernetes cluster, you would need to configure an appropriate CNAME in the DNS for the host you want to use.
 
