@@ -1,214 +1,147 @@
-The back end rest application is running and is accessible to the kubernetes cluster via its service definition `nationalparks-py`. 
-
-The national parks data is held in a mongodb database which you deployed as the very first step in this workshop.
-
-This database is useful as it ensures that the data is available to all replicas of the national parks rest service and of course is available to any other application requiring national parks information.
-
-To view the resources for the database, run:
-
-[.console-input]
-[source,execute]
-----
-kubectl get deployment,service -l role=database -o name
-----
-
-This should yield:
-
-[.console-output]
-[source]
-----
-deployment.apps/mongodb-community-server
-service/mongodb-community-server
-----
-
-You should understand now the purpose of `deployment` and `service`. 
-
-To make this step of the workshop execute successfully, you need to deploy a slightly different version of the nationalparks-py back end service.
-
-type:
-[.console-input]
-[source,execute]
-----
-kubectl apply -f backend-v2/
-----
-
-If you go back to parksmap application in yout browser and refresh the screen, you should notice that the application appears to be hanging, similar to the picture below.
-
-image::broken-parksmap.png[Broken Parksmap, 900]
-
-You could use what you've learned to try and debug the problem.
-
-For example, you could try looking at the nationalpark-py pods logs to see if there are any clues there.
-
-You could try running the `env` command in the nationalparks-py pod to see if there are any clues there.
-
+It is generally best practice to separate environment specific configuration from your container image. This helps to ensure that the container image remains portable. In our Parksmap example, the national parks data is held in a MongoDB database and the backend rest application is accessing this data. 
 
 In order to link the database to the back end rest application, you need to tell the back end rest application the name of the host for the database, and what the login credentials are. 
 
-This is a common problem for any application. The need to provide environment specific configuration. In the database example you can be pretty confident that the database host, credentials, and possibly database name will be different between environments. To avoid hardcoding these and having to make application changes between environments we can use:
+This is a common problem for any application. The need to provide environment specific configuration. In the database example you can be pretty confident that the database host, credentials, and possibly database name will be different between environments. Kubernetes provides a number of ways of passing configuration information to your deployed applications:
 
 * Environment variables (defined in the deployment)
-* Configmaps (externalised configuration)
-* Secrets (externalised configuration that can be store in a secret vault)
+* Configmaps - non confidential data and configuration files. 
+* Secrets - sensitive data, e.g passwords, tokens or keys.
 
-Externalising configuration is best, storing the configuration in a seperate yaml file means that the deployment doesn't need to change between environments.
-
-In this module, you'll take a look at both enironment variables and secrets. In terms of usage, Configmaps are similar to Secrets.
-
-To start with you need to add an environment variable settings to the `deployment` for the back end rest application. 
-
-The way that the back end rest application is implemented, it is expecting the following environment variables for a separate database.
-
-* `DB_URI` - The host name of the database.
-* `DATABASE-USER` - The user to login into the database.
-* `DATABASE-PASSWORD` - The password of the user for the database.
-* `DATABASE-NAME` - The name of the database.
-
-To set environment variables, `kubectl` provides the command `kubectl set env`. You are going to update the live configuration change as you'll want to see these commands in action, but keep in mind that best practice would be to modify the locally stored deployment yaml file to enable the change to easily flow between enironments. Of course, you could add `--dry-run=client` to the command to capture the setting to assist in getting it right.
-
-For the DB_URI, the host name will be the name of the database `service` object, which is `mongodb-community-server`.
-
-To make the change to the `deployment` configuration,, you run :
+When we deployed the MongoDB database, one of the resources that we deployed was a secret which contained connection details for the MongoDB database. Take a look at the secret:
 
 [.console-input]
 [source,execute]
 ----
-kubectl set env deployment/nationalparks-py DB_URI=mongodb-community-server
+kubectl get secret mongodb-nationalparks -o yaml
 ----
 
-You should see the following output:
-
-[.console-output]
-[source]
-----
-deployment.apps/nationalparks-py env updated
-----
-
-You can see what environment variables are set for the back end rest application by running:
-
-[.console-input]
-[source,execute]
-----
-kubectl set env deployment/nationalparks-py --list
-----
-
-The output should like this:
-[.console-output]
-[source]
-----
-DB_URI=mongodb-community-server
-----
-
-If you are unsure if this has worked successfully, you can execute a command in the running container to print the environment variable. We learned this earlier.
-
-[.console-input]
-[source,execute]
-----
-POD=`kubectl get pod -l component=nationalparks-py -o template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | head -1` && echo $POD
-----
-
-[.console-input]
-[source,execute]
-----
-kubectl exec $POD -- env | grep DB_URI
-----
-
-The output should like
-
-[.console-output]
-[source]
-----
-DB_URI=mongodb-community-server
-----
-
-This tells you that running the `kubectl set env` command has successfully update the deployment, resulting in a rolling update (default behaviour) of the pods being restarted to set the environment variable `DB_URI` to the value of `mongodb-community-server`. If we have more than one replica running, a rolling update ensures that the pods are updated one at a time resulting in no disruption in service availability.
-
-The database credentials could be added in a similar way, but for this application we are going to use a `secret`. This makes sense as we potentially want to store sensitive information such as database credentials in a separate place, not expose them directly in the deployment definition and potentially lock them away in a secrets vault. You can view the `secret` called mongo-nationalparks-user-secret.yaml`:
-
-[.console-input]
-[source,execute]
-----
-cat backend-v3/mongo-nationalparks-user-secret.yaml
-----
-
-Within the output you will see the `data` section holding values:
+In the output you should see the data held in the secret:
 
 [.console-output]
 [source]
 ----
 apiVersion: v1
-kind: Secret
-metadata:
-  name: mongodb-nationalparks-user
-  labels:
-    component: nationalparks-py
 data:
-  DATABASE_PASSWORD: bW9uZ29kYg==
-  DATABASE_USER: bW9uZ29kYg==
-type: Opaque
+  DB_URI: bW9uZ29kYi1jb21tdW5pdHktc2VydmVy
+  database-admin-password: bW9uZ29kYg==
+  database-name: bW9uZ29kYg==
+  database-password: bW9uZ29kYg==
+  database-user: bW9uZ29kYg==
+kind: Secret
+...
 ----
 
-What you see aren't the actual values as they have been obfuscated using base64 encoding.
+Secrets are base64 encoded so we can decode the values to see the raw data. Take one of the base64 encoded strings in your output and decode it as follows:
 
-Now, add the secert to our Kubernetes cluster.
+[.console-output]
+[source]
+----
+echo bW9uZ29kYg== | base64 -d
+----
+
+As you can see, if we have access to the secret we can easily find the value. As such, Kubernetes secrets should be protected with additional measures including encyrption at rest and strong RBAC rules to control who can access secrets. External secrets management systems can also be leveraged such as Hashicorp Vault.
+
+Environment variables, Configmaps and secrets can be added to `deployments` so that they are available to applications. Take a look at the backend application to see where the secret is mounted into the containers.
 
 [.console-input]
 [source,execute]
 ----
-kubectl apply -f backend-v3/mongo-nationalparks-user-secret.yaml
+kubectl get deployment nationalparks-py -o yaml
 ----
 
-Now take a look at the secret strored in the cluster.
+The output will include details of the MongoDB database details being mounted as environment variables from the secret `mongodb-nationalparks`.
 
-In order to use the same values, but not actually have to copy them, you can configure the `deployment` to inject the environment variables from the secret. To see how the configuration should look for this you can run:
-
-[.console-input]
-[source,execute]
-----
-kubectl set env deployment/nationalparks-py --from secret/mongodb-nationalparks-user --dry-run=client -o yaml
-----
-
-For these, the `spec.template.spec.containers.env` setting would need to be updated to:
-
-[.console-input]
-[source,execute]
+[.console-output]
+[source]
 ----
     spec:
       containers:
-      - env:
-        - name: DB_URI
-          value: mongodb-community-server
-        - name: DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: DATABASE_PASSWORD
-              name: mongodb-nationalparks-user
-        - name: DATABASE_USER
-          valueFrom:
-            secretKeyRef:
-              key: DATABASE_USER
-              name: mongodb-nationalparks-user
+      - envFrom:
+        - secretRef:
+            name: mongodb-nationalparks
+        image: quay.io/openshiftroadshow/nationalparks-py
 ----
 
-You can see how the `env` will be changed to extract values from the secret.
-
-
-Apply the change by executing the following command (not forgetting that best practise would be to update the deployment yaml file):
+We learnt how to run commands in pods in the previous lab. Run the following command to list environment variables in the backend application. Scroll through the output and find the environment variables that have been set from the `mongodb-nationalparks` secret:
 
 [.console-input]
 [source,execute]
 ----
-kubectl set env deployment/nationalparks-py --from secret/mongodb-nationalparks-user
+kubectl exec deployment/nationalparks-py -- env 
 ----
 
-You should see the following output:
+[.console-output]
+[source]
+----
+DB_URI=mongodb-community-server
+database-admin-password=mongodb
+database-name=mongodb
+database-password=mongodb
+database-user=mongodb
+----
+
+Let's break the application by overriding the `DB_URI` variable. To set environment variables, `kubectl` provides the command `kubectl set env`. You are going to update the live configuration change as you'll want to see these commands in action, but keep in mind that best practice would be to modify yaml files to enable the change to easily flow between enironments. Of course, you could add `--dry-run=client` to the command to capture the setting to assist in getting it right.
+
+Change the DB_URI variable to the `wrong-value` as follows:
 
 [.console-input]
 [source,execute]
 ----
-Warning: key database-password transferred to DATABASE_PASSWORD
-Warning: key database-user transferred to DATABASE_USER
-deployment.apps/nationalparks-py env updated
+kubectl set env deployment/nationalparks-py DB_URI=wrong-value
 ----
 
-The database and the back end rest application are now linked. Make sure everything is works by looking at Parksmap in the web browser again (you might need to resfresh the page).
+This will result in the backend pod being re-deployed. If you go back to parksmap application in your browser and refresh the screen, you should notice that the application appears to be hanging, similar to the picture below.
+
+image::broken-parksmap.png[Broken Parksmap, 900]
+
+Let's use what we have already learnt to try to debug the issue. Take a look at the logs for the backend application:
+
+[.console-input]
+[source,execute]
+----
+kubectl logs -f deployment/nationalparks-py 
+----
+
+It may take a little while, but eventually you should see an error in the logs similar to the following. This shows that we are unable to connect to the MongoDB due to an unknown hostname.
+
+[.console-output]
+[source]
+----
+[Wed Sep 10 10:56:03.919206 2025] [wsgi:error] [pid 24:tid 140452751546112] [remote 10.132.0.155:44792] pymongo.errors.ServerSelectionTimeoutError: wrong-value:27017: [Errno -2] Name or service not known
+----
+
+Take another look at the DB_URI environment variable that we changed:
+
+[.console-input]
+[source,execute]
+----
+kubectl exec deployment/nationalparks-py -- printenv DB_URI
+----
+
+You should see literally see the wrong-value:
+
+[.console-output]
+[source]
+----
+wrong-value
+----
+
+Let's remove the environment variable to fix the application. Adding a hyphen to the end of the environment variable name will remove it:
+
+
+[.console-input]
+[source,execute]
+----
+kubectl set env deployment/nationalparks-py DB_URI-
+----
+
+Wait for the backend deployment to rollout again. Remember, you can check the status:
+
+[.console-input]
+[source,execute]
+----
+kubectl rollout status deployment/nationalparks-py
+----
+
+The `DB_URI` variable should now be set from the secret and not overriden. The database and the back end rest application are now linked. Make sure everything is works by looking at Parksmap in the web browser again (you might need to resfresh the page).
