@@ -152,8 +152,8 @@ This should output:
 
 Finally, restart the deployment of the frontend web application to link it to the backend. The `kubectl rollout` command is used to manage the rollout of resources. This includes rolling back to older versions of deployments in the event of any application issues. We are simply going to re-deploy the same version of the parksmap deployment:
 
-[.console-output]
-[source]
+[.console-input]
+[source,execute]
 ----
 kubectl rollout restart deployment/parksmap
 ----
