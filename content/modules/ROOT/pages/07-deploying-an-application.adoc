@@ -23,9 +23,9 @@ kubectl create deployment parksmap --image quay.io/openshiftroadshow/parksmap:la
 We are going to deploy the remaining components of the Parksmap application. Kubernetes manifests for the MongoDB and the backend application are held in a publically available Github repository, you need to clone it. To do this, in the terminal window enter the following:
 
 [.console-input]
-[source, execute]
+[source, execute, subs="attributes"]
 ----
-git clone https://github.com/pprosser-redhat/k8s-basics.git
+git clone -b {git_branch} https://github.com/pprosser-redhat/k8s-basics.git
 ----
 
 You can see the resulting clone in both terminal windows.
