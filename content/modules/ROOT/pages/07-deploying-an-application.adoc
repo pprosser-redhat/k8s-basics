@@ -136,8 +136,11 @@ Now visit the front end web application again (make sure you refresh the page), 
 
 Fortunately, the backend application has an API that we can use to load the data. To load the data into the database, run the following `curl` command in your terminal window:
 
-`curl http://nationalparks-py.wksp-{user}.svc.cluster.local:8080/ws/data/load`
-
+[.console-input]
+[source,execute]
+----
+curl http://nationalparks-py.wksp-{user}.svc.cluster.local:8080/ws/data/load`
+----
 
 This should output:
 
@@ -147,8 +150,21 @@ This should output:
 "Items inserted in database: 2762"
 ----
 
-As the terminal window is running in the same namespace as the nationalparks-py application on Kubernetes, it can access the kubernetes service directly.
+Finally, restart the deployment of the frontend web application to link it to the backend. The `kubectl rollout` command is used to manage the rollout of resources. This includes rolling back to older versions of deployments in the event of any application issues. We are simply going to re-deploy the same version of the parksmap deployment:
 
+[.console-output]
+[source]
+----
+kubectl rollout restart deployment/parksmap
+----
+
+Wait for the rollout to complete. You can check with:
+
+[.console-input]
+[source,execute]
+----
+kubectl rollout status deployment/parksmap
+----
 
 === Let the fun begin!!!
 
