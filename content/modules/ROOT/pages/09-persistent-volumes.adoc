@@ -21,7 +21,7 @@ The resource definition for the persistent volume claim we need to use can be se
 [.console-input]
 [source,execute]
 ----
-cat database/persistentvolumeclaim.yaml
+cat persistent-storage/persistentvolumeclaim.yaml
 ----
 
 You should see that it contains:
@@ -61,7 +61,7 @@ Create the persistent volume claim by running the following command:
 [.console-input]
 [source,execute]
 ----
-kubectl apply -f database/persistentvolumeclaim.yaml
+kubectl apply -f persistent-storage/persistentvolumeclaim.yaml
 ----
 
 You should get confirmation telling you that the persistent volume claim has been created.
@@ -107,7 +107,7 @@ To see the updated `deployment` configuration run:
 [.console-input]
 [source,execute]
 ----
-cat database-v1/deployment.yaml
+cat persistent-storage/deployment.yaml
 ----
 
 To apply the configuration changes run:
@@ -115,7 +115,7 @@ To apply the configuration changes run:
 [.console-input]
 [source,execute]
 ----
-kubectl apply -f database-v1/deployment.yaml
+kubectl apply -f persistent-storage/deployment.yaml
 ----
 
 You should see confirmation that the deployment was configured. The changes to the deployment have triggered the MongoDB pod to be re-created with the new configuration. Wait for the new pod to start:
