@@ -105,11 +105,8 @@ kubectl logs -f deployment/nationalparks-py
 
 It may take a little while, but eventually you should see an error in the logs similar to the following. This shows that we are unable to connect to the MongoDB due to an unknown hostname.
 
-[.console-output]
-[source]
-----
-[Wed Sep 10 10:56:03.919206 2025] [wsgi:error] [pid 24:tid 140452751546112] [remote 10.132.0.155:44792] pymongo.errors.ServerSelectionTimeoutError: wrong-value:27017: [Errno -2] Name or service not known
-----
+`[Wed Sep 10 10:56:03.919206 2025] [wsgi:error] [pid 24:tid 140452751546112] [remote 10.132.0.155:44792] pymongo.errors.ServerSelectionTimeoutError: wrong-value:27017: [Errno -2] Name or service not known`
+
 
 Take another look at the DB_URI environment variable that we changed:
 
